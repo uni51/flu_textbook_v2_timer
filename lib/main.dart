@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:timer/next_page.dart';
 
 void main() {
   runApp(const App());
@@ -35,22 +36,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _second = 0;
   Timer? _timer;
+  bool _isRunning = false;
 
   @override
   void initState() {
     super.initState();
-
-    // 1秒ごとにカウントアップ
-    _timer = Timer.periodic(
-      // 第一引数：繰り返す間隔の時間を設定
-      const Duration(seconds: 1),
-      // 第二引数：その間隔ごとに動作させたい処理を書く
-      (timer) {
-        setState(() {
-          _second++;
-        });
-      },
-    );
   }
 
   @override
@@ -70,16 +60,66 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  stop();
+                  toggleTimer();
                 },
-                child: const Text('ストップ'))
+                child: Text(
+                  _isRunning ? 'ストップ' : 'スタート',
+                  style: TextStyle(
+                    color: _isRunning ? Colors.red : Colors.green,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  resetTimer();
+                },
+                child: const Text(
+                  'リセット',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
+            ),
           ],
         ),
       ),
     );
   }
 
-  void stop() {
+  void toggleTimer() {
+    if(_isRunning) {
+      _timer?.cancel();
+    }else {
+      _timer = Timer.periodic(
+        const Duration(seconds: 1),
+            (timer) {
+          setState(() {
+            _second++;
+          });
+
+          if (_second == 10) {
+            resetTimer();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NextPage()),
+            );
+          }
+        },
+      );
+    }
+    setState(() {
+      _isRunning = !_isRunning;
+    });
+  }
+
+  void resetTimer() {
     _timer?.cancel();
+    setState(() {
+      _second = 0;
+      _isRunning = false;
+    });
   }
 }
