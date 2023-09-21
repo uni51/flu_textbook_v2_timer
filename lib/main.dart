@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _timer?.cancel();
     } else {
       _timer = Timer.periodic(
-        const Duration(milliseconds: 0),
+        const Duration(milliseconds: 1),
         (timer) {
           setState(() {
             _millisecond++;
