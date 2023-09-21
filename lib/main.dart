@@ -35,11 +35,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _millisecond = 0;
-  String _milliSecondText = '00';
   int _second = 0;
-  String _secondText = '00';
   int _minute = 0;
-  String _minuteText = '00';
   Timer? _timer;
   bool _isRunning = false;
 
@@ -63,25 +60,24 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '$_minuteText',
-                  style: TextStyle(fontSize: 80),
+                  _minute.toString().padLeft(2, '0').substring(0, 2),
+                  style: const TextStyle(fontSize: 80),
                 ),
                 const Text(
                   '.',
                   style: TextStyle(fontSize: 80),
                 ),
                 Text(
-                  '$_secondText',
-                  style: TextStyle(fontSize: 80),
+                  _second.toString().padLeft(2, '0').substring(0, 2),
+                  style: const TextStyle(fontSize: 80),
                 ),
                 const Text(
                   '.',
                   style: TextStyle(fontSize: 80),
                 ),
                 Text(
-                  // '$_millisecond',
-                  '$_milliSecondText',
-                  style: TextStyle(fontSize: 80),
+                  _millisecond.toString().padLeft(3, '0').substring(0, 2),
+                  style: const TextStyle(fontSize: 80),
                 ),
               ],
             ),
@@ -122,19 +118,15 @@ class _MyHomePageState extends State<MyHomePage> {
         (timer) {
           setState(() {
             _millisecond++;
-            _milliSecondText =
-                _millisecond.toString().padLeft(3, '0').substring(0, 2);
           });
 
           if (_millisecond % 1000 == 0) {
             _second++;
-            _secondText = _second.toString().padLeft(2, '0').substring(0, 2);
             _millisecond = 0;
           }
 
           if (_second == 60) {
             _minute++;
-            _minuteText = _minute.toString().padLeft(2, '0').substring(0, 2);
             _second = 0;
           }
 
@@ -143,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => NextPage()),
+              MaterialPageRoute(builder: (context) => const NextPage()),
             );
           }
         },
@@ -158,11 +150,8 @@ class _MyHomePageState extends State<MyHomePage> {
     _timer?.cancel();
     setState(() {
       _millisecond = 0;
-      _milliSecondText = '00';
       _second = 0;
-      _secondText = '00';
       _minute = 0;
-      _minuteText = '00';
       _isRunning = false;
     });
   }
